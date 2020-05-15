@@ -18,6 +18,14 @@ sc = SparkSession.builder.appName("PysparkExample")\
 .config ("spark.sql.execution.arrow.enabled", "true")\
 .getOrCreate()
 
-dataframe_csv = sc.read.csv('sample_HFT.csv')
+loading_start = time.time()
+dataframe_csv = sc.read.option("header", True).csv('sample_HFT.csv')
+loading_end = time.time()
 
+print("Loading time is %s" % (loading_end - loading_start))
+
+query_start = time.time()
 dataframe_csv.select("StockSymbol").show(10)
+query_end = time.time()
+
+print("Query time is %s" % (query_end - query_start))
